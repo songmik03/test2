@@ -32,4 +32,54 @@ int drawBox(int nXpos, int nYpos, int nColor, int nSize)
 	setColor(0,0);
 }
 
+//------------------------------타일맵 엔진
+void map_printCell(int rawdata)
+{
+	
+		switch(rawdata) {
+			case 0:
+			printf(" ");
+			break;
+
+			case 1:
+			printf("+");
+			break;
+
+			case 2:
+			printf("M");
+			break; 
+
+			case 3:
+			printf("A");
+			break;
+
+			case 4:
+			printf("m");
+			break;
+
+			case 5:
+			printf("K");
+			break;
+
+			default:
+			printf(" ");
+			break;
+			
+		}
+	
+}
+
+
+void map_drawAll(int *pMap)
+{
+	int ix, iy;
+	for(iy=0;iy<8;iy++) {
+		for(ix=0;ix<8;ix++) {
+			map_printCell(pMap[ix+iy*8]);
+		}
+		printf("\r\n");
+	}
+}
+
+
 #endif
