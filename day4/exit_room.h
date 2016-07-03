@@ -1,7 +1,7 @@
 #ifndef __EXIT_ROOM__
 #define __EXIT_ROOM__
 
-
+////how about you?
 int buffer_map[64];
 
 int nFSM = 0;
