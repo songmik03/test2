@@ -56,23 +56,26 @@ void move_player(char cmd)
 
 		case 4:
 			if(player_inven ==1) {
-				printf("MISSION CLEAR\r\n");
+				setColor(33,40);
+				printf("CONGRAT!!!MISSION CLEAR\r\n");
 				nFSM=2;
+				setColor(0,0);
 				
 
 			}
 
 			else {
-				printf("it's locked! Need KEY\r\n");
+				printf("-----------------it's locked! Need KEY\r\n");
 				player_xpos=old_xpos;
 				player_ypos=old_ypos;
 			}
 			break;
 
 		case 5:
+			setColor(34,40);
 			printf("키를 얻었다 \r\n");
 			player_inven = 1;
-				
+			setColor(0,0);	
 			
 
 			break;
