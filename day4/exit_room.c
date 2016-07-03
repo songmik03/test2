@@ -47,7 +47,7 @@ int main()
 
 			case 1:
 			
-				printf("명령을 선택하세요.\r\n i(up),j(left),l(right),\r\n k(down),s(show map), x(exit)\r\n");
+				printf("명령을 선택하세요.\r\n                                 i(up),j(left),l(right),\r\n                            k(down),s(show map), x(exit)\r\n");
 				break;
 
 			case '2':
@@ -55,59 +55,60 @@ int main()
 		
 		}
 
-	//	버퍼 초기화	
+		//	버퍼 초기화	
 		for(int i=0;i<64;i++) {
 
 			buffer_map[i] = world_map[i];
-			}	
 
-			scanf("%c", &cmd);
-			getchar();
+		}	
 
-			if(nFSM == 0) {
+		scanf("%c", &cmd);
+		getchar();
 
-				switch(cmd) {
-					case 'p': 
-						nFSM=1; //게임 스타트
-						player_inven =0;
-						player_xpos=1;
-						player_ypos=5;
+		if(nFSM == 0) {
 
-						printf("게일을 시작합니다");
-						break;
-
-					case 'x':
-						bLoop =0;
-						printf("---------------------------bye\r\n");
-						break;
-				}
-			}
-
-			else if(nFSM == 1) {
-				move_player(cmd);
-			
-
-				switch(cmd) {
-					case 'x':
-						bLoop=0;
-						printf("--------------------------bye\r\n");
+			switch(cmd) {
+				case 'p': 
+					nFSM=1; //게임 스타트
+					player_inven =0;
+					player_xpos=1;
+					player_ypos=5;
 					
-						break;
+					key_xpos =3;
+					key_ypos =5;
 
-					case 's':
-						map_drawAll(buffer_map);
-						break;
-				}
+					printf("level.1 \r\n");
+					break;
+
+				case 'x':
+					bLoop =0;
+					printf("---------------------------bye\r\n");
+					break;
 			}
-			else if(nFSM == 2) {
-				nFSM=0;
+		}
+
+		else if(nFSM == 1) {
+			move_player(cmd);
+
+
+			switch(cmd) {
+				case 'x':
+					bLoop=0;
+					printf("--------------------------bye\r\n");
+
+					break;
+
+				case 's':
+					map_drawAll(buffer_map);
+					break;
 			}
+		}
+		else if(nFSM == 2) {
+			nFSM=0;
 
-			
-
-
+			break;
+		}
 	}
-
-
-	return 0;
+		
+		return 0;
 }

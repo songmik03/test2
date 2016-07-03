@@ -1,7 +1,7 @@
 #ifndef __EXIT_ROOM__
 #define __EXIT_ROOM__
 
-////how about you?
+
 int buffer_map[64];
 
 int nFSM = 0;
@@ -9,6 +9,9 @@ int nFSM = 0;
 int player_xpos;
 int player_ypos;
 int player_inven; //0없음 , 1 : 키보유
+
+int key_xpos;
+int key_ypos;
 
 void move_player(char cmd)
 {  
@@ -47,18 +50,20 @@ void move_player(char cmd)
 			break;
 
 		case 2: //문
-			printf("mission clear!\r\n");
+			printf("MISSION CLEAR\r\n");
 			nFSM=2;
 			break;
 
 		case 4:
 			if(player_inven ==1) {
-				printf("mission clear\r\n");
+				printf("MISSION CLEAR\r\n");
 				nFSM=2;
+				
 
 			}
 
 			else {
+				printf("it's locked! Need KEY\r\n");
 				player_xpos=old_xpos;
 				player_ypos=old_ypos;
 			}
@@ -67,7 +72,9 @@ void move_player(char cmd)
 		case 5:
 			printf("키를 얻었다 \r\n");
 			player_inven = 1;
+				
 			
+
 			break;
 
 
@@ -82,8 +89,16 @@ void move_player(char cmd)
 			player_ypos=old_ypos;
 		}
 	*/
-		buffer_map[player_xpos + player_ypos*8]=3;
+		if(player_inven==1) {
+			buffer_map[key_xpos+key_ypos*8]=0;
+		}
 
+ 			
+		buffer_map[player_xpos + player_ypos*8]=3;
+		
+		
+
+	    	
 
 
 }

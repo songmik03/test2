@@ -37,12 +37,17 @@ void map_printCell(int rawdata)
 {
 	
 		switch(rawdata) {
+			
 			case 0:
+			//setColor(37,41);
 			printf(" ");
+			//setColor(0,0);
 			break;
 
 			case 1:
+			setColor(30,47);
 			printf("+");
+			setColor(0,0);
 			break;
 
 			case 2:
@@ -50,15 +55,21 @@ void map_printCell(int rawdata)
 			break; 
 
 			case 3:
+			setColor(33,40);
 			printf("A");
+			setColor(0,0);
 			break;
 
 			case 4:
-			printf("m");
+			setColor(31,40);
+			printf("=>");
+			setColor(0,0);
 			break;
 
 			case 5:
+			setColor(34,40);
 			printf("K");
+			setColor(0,0);
 			break;
 
 			default:
