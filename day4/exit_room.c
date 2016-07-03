@@ -3,6 +3,8 @@
 #include "../engine2d.h"
 #include "exit_room.h"
 
+//any change??
+
 /*
  1-벽              #
  2-열린문          M
