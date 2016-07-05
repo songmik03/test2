@@ -8,8 +8,14 @@
 #include <termios.h>
 
 #include "../engine/engine2d.h"
+#include "r_game.h"
 
 char screen_buffer[8*8];
+
+double rock_acc_tick;
+int rock_pos_x,rock_pos_y;
+int rock_pos_table[8] = {1,3,2,3,4,5,2,7};
+int rock_cur_table_index =0;
 
 int car_posx, car_posy;
 
@@ -32,6 +38,9 @@ int main()
 	
 	car_posy = 7;
 	car_posx = 3;
+	
+	rock_pos_y = 0;
+	rock_pos_x = rock_pos_table [ rock_cur_table_index];
 
 	while(bLoop) {
 
@@ -41,7 +50,8 @@ int main()
 		double delta_tick = cur_tick - last_tick;
 		
 		last_tick = cur_tick;
-
+		
+		//사용자 입력처리
 		if (kbhit() != 0) {
 			char ch = getch();
 			if(ch == 'q') {
@@ -63,46 +73,47 @@ int main()
 				car_posy +=1;
 
 			}
-
-
 		}
+		//바위 움직이기
+		rock_acc_tick += delta_tick;
+
+		if(rock_acc_tick>0.5) {
+			rock_acc_tick =0;
+			rock_pos_y +=1;
+			//화면 끝 도달..
+
+			if(rock_pos_y>=8) {
+				rock_pos_y =0;
+				rock_cur_table_index++;
+				rock_cur_table_index %= 8;
+				rock_pos_x = rock_pos_table [ rock_cur_table_index];
+			}
+		}
+		//게임 로직(판정)
+		if(rock_pos_y == car_posy &&rock_pos_x == car_posx) 
+		{
+			bLoop=0;
+			//drawGame(screen_buffer);
+			printf("game over\n");
+		}
+
+
+
+
 		for(int i=0;i<64;i++) { //스크린버퍼 초기화
 			screen_buffer[i]=0;
 		}
+		//자동차 그리기
 		screen_buffer[car_posy*8+car_posx] = 2;
-
+		//바위 그리기
+		screen_buffer[rock_pos_y*8+rock_pos_x] = 1;
 
 
 		acc_tick += delta_tick;
-		if(acc_tick> 0.1) {
+		if(acc_tick> 0.1 || bLoop == 0) {
 			acc_tick = 0;
-
-			//rendering
-
-			gotoxy(1,1);
-
-			int x,y;
-
-			for(y=0;y<8;y++) {
-				for(x=0;x<8;x++) {
-					switch(screen_buffer[8*y+x]) {
-						case 0:
-							putchar('.');
-							break;
-
-						case  1:
-							putchar('#');
-							break;
-
-						case 2:
-							putchar('A');
-							break;
-
-					}
-
-				}
-				printf("\r\n");
-			}
+			drawGame(8,8,screen_buffer);
+			
 		}
 
 	}
