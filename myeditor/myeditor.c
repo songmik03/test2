@@ -49,10 +49,9 @@ void me_readfile()
 {
 	char *szFileName = strtok(NULL,"");
 	printf("read : %s \r\n", szFileName);
-	
+
 	FILE *pfile = fopen(szFileName,"r");
 	char szBuf[512];
-
 	while(1) {
 		if(fgets(szBuf,512,pfile) == NULL) break;
 		//printf("%s", szBuf);
@@ -95,6 +94,7 @@ void _me_push(char *szText)
 		_S_STR_LINE *pNext =(_S_STR_LINE *)pHeader;
 
 		while(pNext != NULL) {
+
 			//마지막이라면...
 			if(pNext->m_pNext == NULL) {
 				pNext->m_pNext =pLine;
@@ -116,17 +116,21 @@ void me_push()
 }
 void me_pop() {
 	_S_STR_LINE *pLine = pHeader;
-
+	
 	while(pLine != NULL) {
 		//if(((_S_STR_LINE*)(pLine->m_pNext))->m_pNext==NULL) {
 		//	pLine = pLine->m_pNext;
 
 		pLine = pLine->m_pNext;
-		if(pLine != NULL) {
-
+		if(pLine != NULL) {	
 			_S_STR_LINE *pNextNext = pLine->m_pNext;
+
 			if(pNextNext == NULL) {
 				//pLine->m_pNext=NULL;
+				_S_STR_LINE *cpH = pHeader;
+				pLine->m_pNext=NULL;
+				cpH->m_pNext = NULL;
+
 			}
 			else {
 				if(pNextNext->m_pNext == NULL) {
@@ -134,7 +138,12 @@ void me_pop() {
 				}
 			}
 		}
-		pLine = pLine->m_pNext;
+		else {
+		//pLine = pLine->m_pNext;
+		
+		pHeader = NULL;
+		
+		}
 	}
 }
 void me_ins() {
