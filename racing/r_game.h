@@ -17,11 +17,19 @@ void drawGame(int mx, int my, char *pBuf)
 					break;
 
 				case  1:
+					setColor(30,47);
 					putchar('#');
+					setColor(0,0);
 					break;
 
 				case 2:
+					setColor(37,42);
 					putchar('A');
+					setColor(0,0);
+					break;
+
+				case 3:
+					putchar('|');
 					break;
 
 			}
