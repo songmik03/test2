@@ -32,7 +32,7 @@ int main()
 	
 	MapObject.m_header.m_nSkima = 1;
 	MapObject.m_pBuf = NULL;	
-	char TilePalette[] = {'#','.','@','%'};
+	char TilePalette[] = {'.','#','@','%'};
 
 	while(bLoop)
 	{
@@ -99,9 +99,30 @@ int main()
 		}
 		else if(!strcmp(pTemp,"save")) {
 			//save filename
+			
+			char *fName;
+
+			fName = strtok(NULL," ");
+			//printf("%s", fName);
+			FILE *ofp;
+				
+			ofp = fopen(fName,"w");
+
+			//fwrite(MapObject.m_pBuf,sizeof(MapObject.m_pBuf),1,ofp);	
+			fclose(ofp);	
+
+
 		}
 		else if(!strcmp(pTemp,"load")) {
 			//load filename
+			char *fName;
+
+			fName = strtok(NULL," ");
+			FILE *ifp;
+
+			ifp = fopen(fName,"r");
+
+			fclose(ifp);
 		}
 
 

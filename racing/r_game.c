@@ -48,8 +48,17 @@ void rg_PlayGame(double delta_tick)
 
 	switch(nStep) {
 		case 0:
-			nStep++;
+
 			system("clear");
+			nStep = 1;
+			car_posy = 7;
+			car_posx = 4;
+
+			rock1_pos_y = 0;
+			rock2_pos_y = 0;
+			rock1_pos_x = rock_pos[0][rock_cur_table_index];
+			rock2_pos_x = rock_pos[1][rock_cur_table_index];
+
 			break;
 
 		case 1:
@@ -76,6 +85,10 @@ void rg_PlayGame(double delta_tick)
 
 				}
 			}
+			for(int i=0;i<100;i++) { //스크린버퍼 초기화
+				screen_buffer[i]=0;
+			}
+
 			//바위 움직이기
 			rock_acc_tick += delta_tick;
 
@@ -95,9 +108,6 @@ void rg_PlayGame(double delta_tick)
 				}
 			}
 
-			for(int i=0;i<100;i++) { //스크린버퍼 초기화
-				screen_buffer[i]=0;
-			}
 			//벽
 			for(int i=0;i<2;i++) {
 				for(int a=0;a<10;a++) {
@@ -127,9 +137,21 @@ void rg_PlayGame(double delta_tick)
 			}
 			if((rock1_pos_y == car_posy && rock1_pos_x == car_posx) || (rock2_pos_y == car_posy && rock2_pos_x == car_posx)) 
 			{
-				bLoop=0;
+				//bLoop=0;
 				//drawGame(screen_buffer);
-				printf("game over \n");
+				printf("game over \r\n");
+				system("clear");
+				printf("---------------------\r\n");
+				printf("wanna coninue? y/n \r\n");
+				printf("---------------------\r\n");
+				char ch = getch();
+				if (ch == 'y') {
+					nStep=0;
+				}
+				else if(ch == 'n') {
+					printf("GOOD BYE");
+					bLoop=0;
+				}
 			}
 
 		
