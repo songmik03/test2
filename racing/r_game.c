@@ -17,6 +17,9 @@ double acc_tick,last_tick;
 
 
 double rock_acc_tick;
+/*
+ 
+ */
 int rock1_pos_x,rock1_pos_y;
 int rock2_pos_x,rock2_pos_y;
 
@@ -127,19 +130,6 @@ void rg_PlayGame(double delta_tick)
 				bLoop=0;
 				//drawGame(screen_buffer);
 				printf("game over \n");
-				/*puts(" yes or no");
-				if(kbhit() !=0) {
-					char ch =getch();
-					if(ch == 'y') {
-						printf("yes!");
-						//bLoop=0;
-						nFSM=0;
-					}
-					else if(ch =='n') {
-						printf("bye");
-						bLoop=0;
-					}
-				}*/
 			}
 
 		
