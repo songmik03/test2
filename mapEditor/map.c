@@ -3,7 +3,18 @@
 
 #include "map.h"
 
-char Default_Tilepalette[] = {'.','#','@'};
+char Default_Tilepalette[] = {
+	'.', //0
+	'#', //1
+	'@', //2
+	'+', //3
+	'=', //4
+	'^', //5
+	'<', //6
+	'>', //7
+	'|', //8
+	'-', //9
+	'*'}; //10
 
 void map_init(_S_MAP_OBJECT *pObj)
 {
@@ -97,4 +108,17 @@ void map_drawTile_mirror_v(_S_MAP_OBJECT *pObj, int xpos, int ypos, _S_MAP_OBJEC
 			map_put(pTarget,xpos+ix,ypos-iy,pObj->m_pBuf[iy*pObj->m_header.m_nWidth +ix]);
 		}
 	}
+}
+void map_drawTile_trn(_S_MAP_OBJECT *pObj, int xpos,int ypos,_S_MAP_OBJECT *pTarget)
+{
+	for(int iy=0;iy <pObj->m_header.m_nHeight;iy++) {
+		for(int ix=0;ix<pObj->m_header.m_nWidth;ix++) {
+			int nPixel = pObj->m_pBuf[iy*pObj->m_header.m_nWidth + ix];
+
+			if(nPixel != 0) {
+				map_put(pTarget,ix+xpos,iy+ypos, pObj->m_pBuf[iy*pObj->m_header.m_nWidth + ix]);
+			}
+		}
+	}
+
 }
