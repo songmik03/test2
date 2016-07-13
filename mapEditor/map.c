@@ -49,7 +49,12 @@ void map_new(_S_MAP_OBJECT *pObj, int nWidth, int nHeight)
 
 void map_put(_S_MAP_OBJECT *pObj, int x, int y, int nTileIndex)
 {
-	pObj->m_pBuf[y*pObj->m_header.m_nWidth+x] = nTileIndex;
+	//클립핑 처리
+	if(x>=0 && y>=0) {
+		if(x< pObj->m_header.m_nWidth && y < pObj->m_header.m_nHeight) {
+			pObj->m_pBuf[pObj->m_header.m_nWidth*y +x] = nTileIndex;
+		}
+	}
 }
 
 //0:성공
