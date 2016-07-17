@@ -10,6 +10,8 @@
 #include "../engine/engine2d.h"
 #include "map.h"
 
+_S_MAP_OBJECT MapObject;
+
 //-----------------------------------------------------------
 int main() 
 {
