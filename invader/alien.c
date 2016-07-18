@@ -40,7 +40,7 @@ static void Apply(_S_ALIEN_OBJECT *pObj,double deltaTick)
 		}
 		if(pObj->m_pBullet != NULL) {
 			if(pObj->m_pBullet->m_nFSM ==0) {
-				pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,3.0);
+				pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,5.0);
 			}
 		}
 		break;

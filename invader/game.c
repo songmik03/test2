@@ -25,17 +25,36 @@ _S_MAP_OBJECT gScreenBuf[2];
 _S_MAP_OBJECT gPlayerModel;
 _S_MAP_OBJECT gBulletModel;
 _S_MAP_OBJECT gAlienModel;
+_S_MAP_OBJECT gPbulletModel;
 
 _S_Plane gPlayerObject;
-_S_BULLET_OBJECT gBulletObjects[32];
+_S_BULLET_OBJECT gBulletObjects[2];
 _S_ALIEN_OBJECT gAlienObjects[8];
+_S_BULLET_OBJECT gPbulletObject;
+
+double getDist(_S_BULLET_OBJECT *pBullet,_S_Plane *pPlane)
+{
+	double bullet_pos_x = pBullet->m_fXpos;
+	double bullet_pos_y = pBullet->m_fYpos;
+
+	double target_pos_x = pPlane->m_fXpos;
+	double target_pos_y = pPlane->m_fYpos;
+
+	double vx = target_pos_x - bullet_pos_x;
+
+	double vy = target_pos_y - bullet_pos_y;
+
+	double dist = sqrt(vx*vx+vy*vy);
+
+	return dist;
+}
 
 int main()
 {
 	
 	for(int i=0;i<2;i++) {
 		map_init(&gScreenBuf[i]);
-		map_new(&gScreenBuf[i],35,16);
+		map_new(&gScreenBuf[i],50,30);
 		
 	}
 
@@ -48,9 +67,22 @@ int main()
 	map_init(&gAlienModel);
 	map_load(&gAlienModel,"alien.dat");
 
+	map_init(&gPbulletModel);
+	map_load(&gPbulletModel,"bullet.dat");
 
-	Plane_init(&gPlayerObject,&gPlayerModel,17,10);
+	Plane_init(&gPlayerObject,&gPlayerModel,23,25);
+	gPlayerObject.m_nFSM = 1;	
+
 	
+	bullet_init(&gPbulletObject,0,0,10,&gPbulletModel);
+	gPbulletObject.m_nFSM = 1;
+	
+	for(int i=0;i<2;i++)
+	{
+		bullet_init(&gBulletObjects[i],0,0,0,&gBulletModel);
+		gBulletObjects[i].m_nFSM = 1;
+	}
+		
 	double TablePosition[] = {0,6,12};
 
 	for(int i=0;i<2;i++)
@@ -60,6 +92,7 @@ int main()
 		pObj->m_fXpos = TablePosition[i];
 		pObj->m_fYpos = 2;
 		pObj->m_nFSM = 1;
+		pObj->m_pBullet = &gBulletObjects[i];
 	}
 	
 	system("clear");
@@ -84,50 +117,59 @@ int main()
 				bLoop=0;
 				puts("bye~ \r");
 			}
+			else if (ch == 'j') {           		
+
+				gPbulletObject.pfFire(&gPbulletObject,gPlayerObject.m_fXpos,gPlayerObject.m_fYpos,10,0,-1,10);
+			
+
+			}	
+			gPlayerObject.pfApply(&gPlayerObject,delta_tick,ch);
 		}
 		for(int i=0;i<2;i++) 
 		{
 			_S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
 			pObj->pfApply(pObj,delta_tick);
 		}
-
-			/*else if (ch == 'j') {           
-				
-				double bullet_pos_x = 0;
-				double bullet_pos_y = 0;
-				
-				double target_pos_x = gPlayerObject.m_fXpos;
-				double target_pos_y = gPlayerObject.m_fYpos;
-
-				double vx = target_pos_x - bullet_pos_x;
-				double vy = target_pos_y - bullet_pos_y;
-
-				double dist = sqrt(vx*vx + vy*vy);
-				
-				vx /= dist;
-				vy /= dist;
-				
-				gTestBullet.pfFire(&gTestBullet,bullet_pos_x,bullet_pos_y,10,vx,vy,10);
-			}
-			
-			
-			gPlayerObject.pfApply(&gPlayerObject,delta_tick,ch);
+		for(int i=0;i<2;i++)
+		{
+			gBulletObjects[i].pfApply(&gBulletObjects[i],delta_tick);
 		}
-		gTestBullet.pfApply(&gTestBullet,delta_tick);
-		*/
-	
+		if(gBulletObjects[0].m_nFSM !=0) {
+			double dist1 = getDist(&gBulletObjects[0],&gPlayerObject);
+			double dist2 = getDist(&gBulletObjects[1],&gPlayerObject);
+
+			if(dist1<0.25) {
+				gBulletObjects[0].m_nFSM = 0;
+				gPlayerObject.m_nFSM = 0;
+			}
+			else if(dist2<0.25) {
+				gBulletObjects[1].m_nFSM = 0;
+				gPlayerObject.m_nFSM = 0;
+			}
+		}	
+
 		//타이밍 계산
 		acc_tick += delta_tick;
+		
+		gPbulletObject.pfApply(&gPbulletObject,delta_tick);
+		
 
 		if(acc_tick>0.1) {
 			gotoxy(0,0);
 			map_drawTile(&gScreenBuf[0],0,0,&gScreenBuf[1]);
-			//gPlayerObject.pfDraw(&gPlayerObject,&gScreenBuf[1]);
+			gPlayerObject.pfDraw(&gPlayerObject,&gScreenBuf[1]);
+			
+			gPbulletObject.pfDraw(&gPbulletObject,&gScreenBuf[1]);
+			
 			//gTestBullet.pfDraw(&gTestBullet,&gScreenBuf[1]);
 			for(int i=0;i<2;i++)
 			{
 				_S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
 				pObj->pfDraw(pObj,&gScreenBuf[1]);
+			}
+			for(int i=0;i<2;i++)
+			{
+				gBulletObjects[i].pfDraw(&gBulletObjects[i],&gScreenBuf[1]);
 			}
 			map_dump(&gScreenBuf[1],Default_Tilepalette);
 			acc_tick = 0;
