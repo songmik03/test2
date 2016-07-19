@@ -170,6 +170,7 @@ int main()
 		if(gPbulletObject.m_nFSM != 0) {
 			double dist1 = AgetDist(&gPbulletObject,&gAlienObjects[0]);
 			double dist2 = AgetDist(&gPbulletObject,&gAlienObjects[1]);
+			double dist3 = AgetDist(&gPbulletObject,&gAlienObjects[2]);
 
 			if(dist1<2) {
 				gPbulletObject.m_nFSM = 0;
@@ -178,6 +179,10 @@ int main()
 			else if(dist2<2) {
 				gPbulletObject.m_nFSM = 0;
 				gAlienObjects[1].m_nFSM = 0;
+			}
+			else if(dist3<2) {
+				gPbulletObject.m_nFSM = 0;
+				gAlienObjects[2].m_nFSM = 0;
 			}
 		}
 
