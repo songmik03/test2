@@ -48,22 +48,6 @@ double getDist(_S_BULLET_OBJECT *pBullet,_S_Plane *pPlane)
 
 	return dist;
 }
-double AgetDist(_S_BULLET_OBJECT *pBullet,_S_ALIEN_OBJECT *pPlane)
-{
-	double bullet_pos_x = pBullet->m_fXpos;
-	double bullet_pos_y = pBullet->m_fYpos;
-
-	double target_pos_x = pPlane->m_fXpos;
-	double target_pos_y = pPlane->m_fYpos;
-
-	double vx = target_pos_x - bullet_pos_x;
-
-	double vy = target_pos_y - bullet_pos_y;
-
-	double dist = sqrt(vx*vx+vy*vy);
-
-	return dist;
-}
 int main()
 {
 
@@ -83,7 +67,7 @@ int main()
 	map_load(&gAlienModel,"alien.dat");
 
 	map_init(&gPbulletModel);
-	map_load(&gPbulletModel,"bullet1.dat");
+	map_load(&gPbulletModel,"bullet.dat");
 
 	Plane_init(&gPlayerObject,&gPlayerModel,23,25);
 	gPlayerObject.m_nFSM = 1;	
@@ -100,7 +84,7 @@ int main()
 
 	double TablePosition[] = {0,6,12};
 
-	for(int i=0;i<3;i++)
+	for(int i=0;i<2;i++)
 	{
 		_S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
 		alien_init(pObj,&gAlienModel);
@@ -140,7 +124,7 @@ int main()
 			}	
 			gPlayerObject.pfApply(&gPlayerObject,delta_tick,ch);
 		}
-		for(int i=0;i<3;i++) 
+		for(int i=0;i<2;i++) 
 		{
 			_S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
 			pObj->pfApply(pObj,delta_tick);
@@ -167,19 +151,7 @@ int main()
 		acc_tick += delta_tick;
 
 		gPbulletObject.pfApply(&gPbulletObject,delta_tick);
-		if(gPbulletObject.m_nFSM != 0) {
-			double dist1 = AgetDist(&gPbulletObject,&gAlienObjects[0]);
-			double dist2 = AgetDist(&gPbulletObject,&gAlienObjects[1]);
 
-			if(dist1<2) {
-				gPbulletObject.m_nFSM = 0;
-				gAlienObjects[0].m_nFSM = 0;
-			}
-			else if(dist2<2) {
-				gPbulletObject.m_nFSM = 0;
-				gAlienObjects[1].m_nFSM = 0;
-			}
-		}
 
 		if(acc_tick>0.1) {
 			gotoxy(0,0);
@@ -189,7 +161,7 @@ int main()
 			gPbulletObject.pfDraw(&gPbulletObject,&gScreenBuf[1]);
 
 			//gTestBullet.pfDraw(&gTestBullet,&gScreenBuf[1]);
-			for(int i=0;i<3;i++)
+			for(int i=0;i<2;i++)
 			{
 				_S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
 				pObj->pfDraw(pObj,&gScreenBuf[1]);
