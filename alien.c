@@ -19,54 +19,51 @@ static void Apply(_S_ALIEN_OBJECT *pObj,double deltaTick)
 
 	switch(pObj->m_nFSM) {
 		case 0:
-		break;
-
-		case 1:
-		pObj->m_nFSM = 2;
-		break;
+			pObj->m_nFSM = 2;
+			break;
 
 		case 2:
-		pObj->m_fXpos += ( deltaTick * pObj->m_fSpeed);
-		if(pObj->m_fXpos > 47) {
+			pObj->m_fXpos += ( deltaTick * pObj->m_fSpeed);
+			if(pObj->m_fXpos > 33) {
 
-			pObj->m_nFSM = 3;
-			pObj->m_nStep = 0;
+				pObj->m_nFSM = 3;
+				pObj->m_nStep = 0;
 
-			pObj->m_fYpos +=1;
+				pObj->m_fYpos +=1;
 
-			if(pObj->m_fYpos >=15) {
-				pObj->m_nFSM = 0;
+				if(pObj->m_fYpos >=15) {
+					pObj->m_nFSM = 0;
+				}
 			}
-		}
-		if(pObj->m_pBullet != NULL) {
-			if(pObj->m_pBullet->m_nFSM ==0) {
-				pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,5.0);
+			if(pObj->m_pBullet != NULL) {
+				if(pObj->m_pBullet->m_nFSM ==0) {
+					pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,5.0);
+				}
 			}
-		}
-		break;
+			break;
 
 		case 3:
-		pObj->m_fXpos -= (deltaTick * pObj->m_fSpeed);
-		if(pObj->m_fXpos<2) {
+			pObj->m_fXpos -= (deltaTick * pObj->m_fSpeed);
+			if(pObj->m_fXpos<2) {
 
-			pObj->m_nFSM = 2;
-			pObj->m_nStep = 0;
+				pObj->m_nFSM = 2;
+				pObj->m_nStep = 0;
 
-			pObj->m_fYpos +=1;
+				pObj->m_fYpos +=1;
 
-			if(pObj->m_fYpos >=15) {
-				pObj->m_nFSM = 0;
+				if(pObj->m_fYpos >=15) {
+					pObj->m_nFSM = 0;
 
 
+				}
 			}
-		}
-		if(pObj->m_pBullet != NULL) {
-			if(pObj->m_pBullet->m_nFSM == 0) {
-				pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,3.0);
+			if(pObj->m_pBullet != NULL) {
+				if(pObj->m_pBullet->m_nFSM == 0) {
+					pObj->m_pBullet->pfFire(pObj->m_pBullet,pObj->m_fXpos,pObj->m_fYpos,5.0,0,1.0,3.0);
+				}
 			}
-		}
 
-		break;
+			break;
 	}
 }
 static void Draw(_S_ALIEN_OBJECT *pObj, _S_MAP_OBJECT *pBuff)
