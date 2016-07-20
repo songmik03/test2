@@ -4,13 +4,13 @@
 int array[] = {1,2,3,4,5,6,7,8};
 int rangeSize = sizeof(array)/sizeof(int);
 
-void change(int rangeSize)
+void change(int rSize)
 {
 	int temp[10];
 	memcpy(temp,array,sizeof(array));
 	
-	for(int i=0;i<rangeSize;i++) {
-		array[(rangeSize-1)-i] = temp[i];
+	for(int i=0;i<rSize;i++) {
+		array[(rSize-1)-i] = temp[i];
 	}
 
 }
