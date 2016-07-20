@@ -1,23 +1,69 @@
-#ifndef __PLANE_H__
-#define __PLANE_H__
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/select.h>
+#include <termios.h>
 
-typedef struct _S_Plane {
+#include "../engine/engine2d.h"
+#include "../mapEditor/map.h"
 
-	int m_nFSM;
-	int m_nStep;
+#include "plane.h"
 
-	double m_fXpos;
-	double m_fYpos;
-	_S_MAP_OBJECT *m_pBody;
-	void (*pfApply)(struct _S_Plane *,double, char );
-	void (*pfDraw)(struct _S_Plane *,struct _S_MAP_OBJECT *);
+void Plane_Apply(_S_Plane *pObj,double deltaTick, char key_input)
+{
+	switch(pObj->m_nFSM) {
+		case 0:  //die
+			break;
+		case 1:  //play
 
-	double m_fCenterX;
-	double m_fCenterY;
+			switch(key_input)
+			{
+				case 'a':
+					pObj->m_fXpos -= 1;
+					break;
 
+				case 'd':
+					pObj->m_fXpos += 1;
+					break;
 
-}_S_Plane;
+				case 'w':
+					pObj->m_fYpos -= 1;
+					break;
 
-void Plane_init(_S_Plane *pObj,_S_MAP_OBJECT *pBody,int x, int y);
+				case 's':
+					pObj->m_fYpos += 1;
+					break;
+			}	
+			break;
+	}
+}
+void Plane_Draw(_S_Plane *pObj, _S_MAP_OBJECT *pBuff)
+{
+	switch(pObj->m_nFSM)
+	{
+		case 0:
+			break;
+		default :
+			map_drawTile_trn(pObj->m_pBody,pObj->m_fXpos + pObj->m_fCenterX,pObj->m_fYpos + pObj->m_fCenterY,pBuff);
+			break;
+	}
+}
 
-#endif
+void Plane_init(_S_Plane *pObj,_S_MAP_OBJECT *pBody,int x, int y)
+{
+	pObj->m_nFSM = 0;
+	pObj->m_nStep = 0;
+
+	pObj->m_pBody = pBody;
+	pObj->m_fYpos = y;
+	pObj->m_fXpos = x;
+
+	pObj->pfApply = Plane_Apply;
+	pObj->pfDraw = Plane_Draw;
+
+	pObj->m_fCenterX = 0 - (pBody->m_header.m_nWidth/2);
+	pObj->m_fCenterY = 0 - (pBody->m_header.m_nHeight/2);
+}

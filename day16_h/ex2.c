@@ -14,6 +14,7 @@ void change(int rSize)
 	}
 
 }
+
 int main()
 {
 	change(rangeSize);	
