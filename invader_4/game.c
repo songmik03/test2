@@ -16,7 +16,7 @@
 
 
 //invader game
-//try
+//try timing control!!!
 
 
 struct timespec work_timer;
@@ -70,7 +70,7 @@ double AgetDist(_S_BULLET_OBJECT *pBullet,_S_ALIEN_OBJECT *pPlane)
 }
 int main()
 {
-	
+    srand(time(NULL));
 
     for(int i=0;i<2;i++) {
         map_init(&gScreenBuf[i]);
@@ -111,13 +111,14 @@ int main()
     }
 
     //--------------------------------------------------alien objects
-    double TablePosition[] = {0,6,12,18,24,30,36,42,48,54};
+    double TablePosition_x[] = {0,6,12,18,24,30,36,42,48,54};
+    //double TablePosition_y[] = {0,2,0,2,0,2,0,2,0,2};
 
     for(int i=0;i<10;i++)
     {
         _S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
         alien_init(pObj,&gAlienModel);
-        pObj->m_fXpos = TablePosition[i];
+        pObj->m_fXpos = TablePosition_x[i];
         pObj->m_fYpos = 2;
         pObj->m_nFSM = 1;
         pObj->m_pBullet = &gBulletObjects[i];
@@ -163,14 +164,19 @@ int main()
             gPlayerObject.pfApply(&gPlayerObject,delta_tick,ch);
         }
 //alien apply
+        double randPosition[] = {0,2,6,4,8,2,1,4,0,2};
         for(int i=0;i<10;i++)
         {
+
+            double randNumber = randPosition[i];
+
             _S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
-            pObj->pfApply(pObj,delta_tick);
+            pObj->pfApply(pObj,delta_tick,randNumber);
         }
 //alien bullet apply
         for(int i=0;i<5;i++)
         {
+
             _S_BULLET_OBJECT *pObj = &gBulletObjects[i];
             pObj->pfApply(pObj,delta_tick);
 
