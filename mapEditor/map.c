@@ -4,7 +4,7 @@
 #include "map.h"
 
 char Default_Tilepalette[] = {
-	'.', //0
+	' ', //0
 	'#', //1
 	'@', //2
 	'w', //3
@@ -109,6 +109,7 @@ void map_drawTile(_S_MAP_OBJECT *pObj, int xpos, int ypos, _S_MAP_OBJECT *pTarge
 {
 	for(int iy=0;iy <pObj->m_header.m_nHeight;iy++) {
 		for(int ix=0;ix<pObj->m_header.m_nWidth;ix++) {
+
 			map_put(pTarget,ix+xpos,iy+ypos,pObj->m_pBuf[iy*pObj->m_header.m_nWidth +ix]);
 		}
 	}

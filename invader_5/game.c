@@ -32,14 +32,14 @@ _S_MAP_OBJECT gPlayerModel;
 _S_MAP_OBJECT gBulletModel;
 _S_MAP_OBJECT gAlienModel;
 _S_MAP_OBJECT gPbulletModel;
-//_S_MAP_OBJECT gBoxModel;
+_S_MAP_OBJECT gBoxModel;
 
 
 _S_Plane gPlayerObject;
 _S_BULLET_OBJECT gBulletObjects[5];
-_S_ALIEN_OBJECT gAlienObjects[10];
+_S_ALIEN_OBJECT gAlienObjects[6];
 _S_BULLET_OBJECT gPbulletObject[32];
-//_S_BULLET_OBJECT gBoxObject;
+_S_BULLET_OBJECT gBoxObject;
 
 double getDist(_S_BULLET_OBJECT *pBullet,_S_Plane *pPlane)
 {
@@ -93,7 +93,10 @@ void mainTitle()
 {
     switch(nStep) {
         case 0:
-        puts("\r\n \r\n press to start");
+        setColor(31,40);
+        puts("\r\n \r\n     INVADER GAME\r\n");
+        setColor(0,0);
+        puts("\r\n \r\n press any key to start");
         nStep = 1;
         break;
 
@@ -130,16 +133,16 @@ int main()
     map_init(&gPbulletModel);
     map_load(&gPbulletModel,"bullet1.dat");
 
-    //map_init(&gBoxModel);
-    //map_load(&gBoxModel,"box.dat");
+    map_init(&gBoxModel);
+    map_load(&gBoxModel,"box.dat");
 
     //---------------------------------------------------player plane
     Plane_init(&gPlayerObject,&gPlayerModel,23,25);
     gPlayerObject.m_nFSM = 1;
 
     //-----------------------------------box
-    //bullet_init(&gBoxObject,0,0,0,&gBoxModel);
-    //gBoxObject.m_nFSM = 1;
+    bullet_init(&gBoxObject,0,0,0,&gBoxModel);
+    gBoxObject.m_nFSM = 1;
     //---------------------------------player bullet
     for(int i=0;i<32;i++)
     {
@@ -158,7 +161,7 @@ int main()
     double TablePosition_x[] = {0,6,12,18,24,30,36,42,48,54};
     //double TablePosition_y[] = {0,2,0,2,0,2,0,2,0,2};
 
-    for(int i=0;i<10;i++)
+    for(int i=0;i<6;i++)
     {
         _S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
         alien_init(pObj,&gAlienModel);
@@ -213,7 +216,7 @@ int main()
             }
             //alien apply
             double randPosition[] = {0,2,6,4,8,2,1,4,0,2};
-            for(int i=0;i<10;i++)
+            for(int i=0;i<6;i++)
             {
 
                 double randNumber = randPosition[i];
@@ -274,13 +277,18 @@ int main()
                         if(dist[i]<2) {
                             pObj->m_nFSM = 0;
                             gAlienObjects[i].m_nFSM = 0;
-                            //gBoxObject.pfFire(&gBoxObject,10,10,5,0,-1,10);
+                            if(gBoxObject.m_nFSM ==0) {
+                                double boxposition[] = {30,22,16,10,28,30,15,24,20,22};
+                                gBoxObject.pfFire(&gBoxObject,boxposition[i],10,5,0,1,5);
+                            }
                         }
 
                     }
 
                 }
+
             }
+
             if(gPlayerObject.m_nFSM ==0) {
                 system("clear");
                 printf("\r\n -----------------------------\r\n");
@@ -289,8 +297,19 @@ int main()
                 bLoop =0;
 
             }
-            //gBoxObject.pfApply(&gBoxObject,delta_tick);
+            gBoxObject.pfApply(&gBoxObject,delta_tick);
+            if(gBoxObject.m_nFSM !=0) {
+                double distb;
+                distb = getDist(&gBoxObject,&gPlayerObject);
 
+
+                if(distb<1.25) {
+                    gBoxObject.m_nFSM = 0;
+                    //gPlayerObject.m_nFSM = 0;
+
+                }
+
+            }
 
             //타이밍 계산
             acc_tick += delta_tick;
@@ -299,6 +318,9 @@ int main()
             if(acc_tick>0.1) {
             gotoxy(0,0);
             map_drawTile(&gScreenBuf[0],0,0,&gScreenBuf[1]);
+
+
+            gBoxObject.pfDraw(&gBoxObject,&gScreenBuf[1]);
 
             //player draw
             gPlayerObject.pfDraw(&gPlayerObject,&gScreenBuf[1]);
@@ -310,10 +332,10 @@ int main()
                 pObj->pfDraw(pObj,&gScreenBuf[1]);
             }
 
-            //gBoxObject.pfDraw(&gBoxObject,&gScreenBuf[1]);
+
 
             //alien draw
-            for(int i=0;i<10;i++)
+            for(int i=0;i<6;i++)
             {
                 _S_ALIEN_OBJECT *pObj = &gAlienObjects[i];
                 pObj->pfDraw(pObj,&gScreenBuf[1]);
